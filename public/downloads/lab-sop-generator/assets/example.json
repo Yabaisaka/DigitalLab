@@ -1,0 +1,29 @@
+{
+  "format": "digitallab.sop",
+  "schemaVersion": 1,
+  "device": { "name": "示例表征设备（请替换）", "model": "", "code": "" },
+  "precautions": "- 本文件是结构示例，实际操作须依据本设备说明书填写。\n- 使用前确认所选SOP适用于当前样品和任务。",
+  "labelTips": ["操作前确认适用测量方式", "异常时停止操作并联系负责人"],
+  "sops": [
+    {
+      "id": "routine-measurement",
+      "name": "常规测量（示例）",
+      "version": "草稿",
+      "applicability": "待补充：明确常规测量的样品类型与范围。",
+      "precautions": "待补充：填写本方式特有的限制。",
+      "steps": [{"title": "核对测量条件", "body": "待补充：根据实际说明书填写操作顺序、条件与判断标准，不猜测参数。"}],
+      "sources": [],
+      "reviewNotes": ["本条目仅展示结构，请提供真实说明书并由负责人核对。"]
+    },
+    {
+      "id": "special-sample",
+      "name": "特殊样品测量（示例）",
+      "version": "草稿",
+      "applicability": "待补充：说明特殊样品的特征及本方式适用条件。",
+      "precautions": "待补充：说明区别于常规测量的注意事项。",
+      "steps": [{"title": "确认专用流程", "body": "待补充：只在资料支持该使用方式时保留此SOP，否则删除。"}],
+      "sources": [],
+      "reviewNotes": ["此使用方式是否适用于实际设备待确认。"]
+    }
+  ]
+}

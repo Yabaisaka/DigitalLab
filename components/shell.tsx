@@ -1,0 +1,12 @@
+'use client';
+import Link from 'next/link';
+import { usePathname,useRouter } from 'next/navigation';
+import { BookOpen, LayoutGrid, QrCode, Settings, Users, ArrowUpRight, LogOut, FlaskConical, FileSpreadsheet, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import type { User } from '@/lib/types';
+import { api,Notice } from './ui';
+export default function Shell({user,labName,logoId,children}:{user:User|null;labName:string;logoId:string;children:React.ReactNode}){
+  const path=usePathname(),router=useRouter();const [open,setOpen]=useState(false),[error,setError]=useState('');
+  const items=[{href:'/',label:'设备目录',icon:LayoutGrid},...(user?.role==='admin'?[{href:'/admin/labels',label:'信息标签',icon:QrCode},{href:'/admin/import',label:'批量导入',icon:FileSpreadsheet},{href:'/admin/users',label:'成员管理',icon:Users},{href:'/admin/settings',label:'实验室设置',icon:Settings}]:[])];
+  return <div className="app-shell"><aside className={`sidebar ${open?'opened':''}`}><Link className="brand" href="/">{logoId?<img src={`/api/files/${logoId}`} alt="实验室标识"/>:<span className="brand-mark"><FlaskConical size={24}/></span>}<span>DigitalLab<small>实验室设备档案</small></span></Link><button className="mobile-close icon-button" onClick={()=>setOpen(false)} aria-label="关闭导航"><X/></button><div className="nav-caption">工作空间</div><nav>{items.map(({href,label,icon:Icon})=><Link key={href} href={href} className={(href==='/'?path==='/':path.startsWith(href))?'active':''} onClick={()=>setOpen(false)}><Icon size={18}/>{label}</Link>)}</nav><div className="sidebar-bottom"><BookOpen size={21}/><p>一台设备，一份可靠档案。</p><span>扫码即可查看操作资料</span></div><div className="identity">{user?<><span className="avatar">{user.name.slice(0,1)}</span><div>{user.name}<small>{user.role==='admin'?'管理员':'实验室成员'}</small></div><button className="icon-button" aria-label="退出登录" onClick={async()=>{try{await api('/api/auth',{method:'DELETE'});router.push('/');router.refresh();}catch(e){setError((e as Error).message);}}}><LogOut size={17}/></button></>:<Link href="/login">成员登录 <ArrowUpRight size={17}/></Link>}</div></aside><div className="main-wrap"><header className="topbar"><button className="mobile-menu icon-button" onClick={()=>setOpen(true)} aria-label="打开导航"><Menu/></button><span>{labName}</span><span className="topbar-meta">{user?'内部工作空间':'公开设备目录'}<span className="tiny-dot"/></span></header><main><Notice message={error}/>{children}</main><footer>DigitalLab <span>设备资料以实验室核对发布的版本为准</span></footer></div></div>;
+}
