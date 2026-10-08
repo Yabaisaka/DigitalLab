@@ -1,0 +1,5 @@
+.deletion-panel { margin-top: 28px; border-color: #ead1d1; }
+.deletion-panel h2, .deletion-panel .button.danger { color: #a52e36; }
+.deletion-panel .button.danger { border-color: #e3bfc2; }
+.deletion-panel .button.danger:hover:not(:disabled) { background: #fff1f2; }
+.deletion-panel .field { max-width: 440px; }

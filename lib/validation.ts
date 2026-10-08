@@ -4,6 +4,9 @@ import { sopProfilesSchema } from './sop';
 const text = z.string().trim().max(4000).default('');
 const short = z.string().trim().max(200).default('');
 const date = z.string().refine(v => !v || /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v)) && new Date(v).toISOString().slice(0,10) === v, '日期无效').default('');
+export const loanSchema = z.object({borrower:short,contact:short,borrowedAt:date,expectedReturnAt:date,returnedAt:date,notes:text}).superRefine((loan,ctx)=>{
+  for(const key of ['expectedReturnAt','returnedAt'] as const)if(loan.borrowedAt&&loan[key]&&loan[key]<loan.borrowedAt)ctx.addIssue({code:'custom',path:[key],message:'归还日期不能早于借出日期'});
+});
 export const deviceSchema = z.object({
   name: z.string().trim().min(1, '设备名称必填').max(120), code: z.string().trim().min(1, '设备编号必填').max(40).regex(/^[\p{L}\p{N}_.-]+$/u, '编号只能包含文字、数字、点、短横线或下划线'),
   category: short, model: short, manufacturer: short, serial: short, room: short, owner: short,
@@ -14,6 +17,7 @@ export const deviceSchema = z.object({
   sop: z.array(z.object({title: z.string().trim().min(1).max(120), body: z.string().trim().min(1).max(4000)})).max(50).default([]), sopVersion: short,
   purchaseDate: date, price: z.string().trim().max(30).regex(/^(?:\d{1,12}(?:\.\d{1,2})?)?$/, '价格须为非负金额').default(''),
   supplier: short, salesPhone: short, warrantyUntil: date, internalNotes: text,
+  loan:loanSchema.default({borrower:'',contact:'',borrowedAt:'',expectedReturnAt:'',returnedAt:'',notes:''}),
   purchaseChannel: short,
   purchaseUrl: z.string().trim().max(2000).refine(v=>!v||(/^https?:\/\//i.test(v)&&z.url().safeParse(v).success),'请输入http或https链接').default(''),
   maintenance: z.array(z.object({id: z.string().max(100), date, kind: z.enum(['故障','维修','保养','校准']), detail: z.string().trim().min(1).max(4000), nextDate: date})).max(1000).default([])

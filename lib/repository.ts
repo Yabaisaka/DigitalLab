@@ -5,8 +5,9 @@ type Row = { id: string; data: DeviceData; updated_at: Date; revision: number };
 const fromRow = (r: Row): Device => ({...emptyDevice, ...r.data, id:r.id, revision:r.revision, updatedAt:new Date(r.updated_at).toISOString()});
 export function projectDevice(d: Device, user: User | null) {
   if (user) return d;
-  const {purchaseDate, price, supplier, salesPhone, warrantyUntil, purchaseChannel, purchaseUrl, internalNotes, maintenance, ...safe} = d;
+  const {purchaseDate, price, supplier, salesPhone, warrantyUntil, purchaseChannel, purchaseUrl, internalNotes, maintenance, loan, ...safe} = d;
   void purchaseDate; void price; void supplier; void salesPhone; void warrantyUntil; void purchaseChannel; void purchaseUrl; void internalNotes; void maintenance;
+  void loan;
   return safe;
 }
 export async function getDevice(id: string, user: User | null): Promise<Device | null> {

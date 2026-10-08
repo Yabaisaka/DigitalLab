@@ -1,4 +1,5 @@
-export const statuses = ['正常', '维护中', '故障', '停用'] as const;
+export const statuses = ['正常', '出借中', '维护中', '故障', '停用'] as const;
+export type Loan = { borrower:string; contact:string; borrowedAt:string; expectedReturnAt:string; returnedAt:string; notes:string };
 export type Role = 'admin' | 'member';
 export type User = { id: string; email: string; name: string; role: Role };
 export type SopStep = { title: string; body: string };
@@ -12,6 +13,7 @@ export type DeviceData = {
   sopProfiles:SopProfile[];
   purchaseDate: string; price: string; supplier: string; salesPhone: string; warrantyUntil: string; purchaseChannel: string; purchaseUrl: string;
   internalNotes: string; maintenance: Maintenance[];
+  loan: Loan;
 };
 export type Device = DeviceData & { id: string; updatedAt: string; revision: number };
 export type Attachment = { id: string; deviceId: string | null; name: string; kind: 'photo' | 'manual' | 'contract' | 'invoice' | 'other' | 'logo'; visibility: 'public' | 'internal'; mime: string; size: number };
@@ -19,7 +21,7 @@ export type Settings = { labName: string; contact: string; baseUrl: string; logo
 export const emptyDevice: DeviceData = {
   name: '', code: '', category: '', model: '', manufacturer: '', serial: '', room: '', owner: '', ownerPhone: '', manufacturerPhone: '',
   parameters: '', status: '正常', published: false, isDemo: false, labelName: '', labelTips: [], precautions: '', sop: [], sopVersion: '',
-  sopProfiles:[],
+  sopProfiles:[], loan:{borrower:'',contact:'',borrowedAt:'',expectedReturnAt:'',returnedAt:'',notes:''},
   purchaseDate: '', price: '', supplier: '', salesPhone: '', warrantyUntil: '', purchaseChannel: '', purchaseUrl: '', internalNotes: '', maintenance: []
 };
 export const defaultSettings: Settings = { labName: '实验室设备档案', contact: '', baseUrl: '', logoId: '', scanToken: '', scanVerifiedAt: '' };
